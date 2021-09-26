@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PaymentTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">CodeCoverageReport</a> &gt; <a href="index.source.html" class="el_package">ltu</a> &gt; <span class="el_source">PaymentTest.java</span></div><h1>PaymentTest.java</h1><pre class="source lang-java linenums">package ltu;
+
+import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+
+import org.junit.After;
+import org.junit.Test;
+
+<span class="fc" id="L12">public class PaymentTest {</span>
+<span class="fc" id="L13">    private CalendarImpl cal = new CalendarImpl();</span>
+
+    
+    @Test
+    public void testGetLoad() throws IOException {        
+        // ICalendar cal1 = new ICalendar();
+<span class="fc" id="L19">        PaymentImpl payment = new PaymentImpl(cal);</span>
+        // int test = payment.getMonthlyAmount(&quot;19990101-0000&quot;, 0, 0, 0);
+<span class="fc" id="L21">        assertEquals(0, payment.getMonthlyAmount(&quot;19990101-0000&quot;, 0, 0, 0));</span>
+<span class="fc" id="L22">    }</span>
+
+    @Test
+    public void testAgeRestrictionsAround20() throws IOException {
+<span class="fc" id="L26">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
+<span class="fc" id="L27">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 100));    // age &gt; 20</span>
+<span class="fc" id="L28">        assertEquals(9904, payment.getMonthlyAmount(&quot;20010101-0000&quot;, 0, 100, 100));    // age == 20</span>
+<span class="fc" id="L29">        assertEquals(0, payment.getMonthlyAmount(&quot;20020101-0000&quot;, 0, 100, 100));    // age &lt; 20</span>
+<span class="fc" id="L30">    }</span>
+
+    @Test
+    public void testAgeRestrictionsAround47() throws IOException {
+<span class="fc" id="L34">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
+<span class="fc" id="L35">        assertEquals(9904, payment.getMonthlyAmount(&quot;19750101-0000&quot;, 0, 100, 100));    // age &lt; 47</span>
+<span class="fc" id="L36">        assertEquals(2816, payment.getMonthlyAmount(&quot;19740101-0000&quot;, 0, 100, 100));    // age == 47</span>
+<span class="fc" id="L37">        assertEquals(2816, payment.getMonthlyAmount(&quot;19730101-0000&quot;, 0, 100, 100));    // age &gt; 47</span>
+<span class="fc" id="L38">    }</span>
+
+    @Test
+    public void testAgeRestrictionsAround56() throws IOException {
+<span class="fc" id="L42">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
+<span class="fc" id="L43">        assertEquals(2816, payment.getMonthlyAmount(&quot;19660101-0000&quot;, 0, 100, 100));    // age &lt; 56</span>
+<span class="fc" id="L44">        assertEquals(2816, payment.getMonthlyAmount(&quot;19650101-0000&quot;, 0, 100, 100));    // age == 56</span>
+<span class="fc" id="L45">        assertEquals(0, payment.getMonthlyAmount(&quot;19640101-0000&quot;, 0, 100, 100));    // age &gt; 56</span>
+<span class="fc" id="L46">    }</span>
+    
+    @Test
+    public void testIncomeRestrictionsFullTime() throws IOException {
+<span class="fc" id="L50">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
+<span class="fc" id="L51">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 85813, 100, 100));    // income &lt;</span>
+<span class="fc" id="L52">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 85812, 100, 100));    // income ==</span>
+<span class="fc" id="L53">        assertEquals(0, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 85814, 100, 100));    // income &gt;</span>
+<span class="fc" id="L54">    }</span>
+    
+    @Test
+    public void testIncomeRestrictionsPartTime() throws IOException {
+<span class="fc" id="L58">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
+<span class="fc" id="L59">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 128721, 50, 100));    // income &lt;</span>
+<span class="fc" id="L60">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 128722, 50, 100));    // income ==</span>
+<span class="fc" id="L61">        assertEquals(0, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 128723, 50, 100));    // income &gt;</span>
+<span class="fc" id="L62">    }</span>
+    
+    @Test
+    public void testStudyRateRestrictionsPartTime() throws IOException {
+<span class="fc" id="L66">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
+<span class="fc" id="L67">        assertEquals(0, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 49, 100));    // study rate &lt;</span>
+<span class="fc" id="L68">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 50, 100));    // study rate ==</span>
+<span class="fc" id="L69">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 51, 100));    // study rate &gt;</span>
+<span class="fc" id="L70">    }</span>
+    
+    @Test
+    public void testStudyRateRestrictionsFullTime() throws IOException {
+<span class="fc" id="L74">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
+<span class="fc" id="L75">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 99, 100));    // study rate &lt;</span>
+<span class="fc" id="L76">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 100));    // study rate ==</span>
+<span class="fc" id="L77">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 101, 100));    // study rate &gt;</span>
+<span class="fc" id="L78">    }</span>
+    
+    @Test
+    public void testCompletionRatioRestrictions() throws IOException {
+<span class="fc" id="L82">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
+<span class="fc" id="L83">        assertEquals(0, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 49));    // completion ratio &lt;</span>
+<span class="fc" id="L84">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 50));    // completion ratio ==</span>
+<span class="fc" id="L85">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 51));    // completion ratio &gt;</span>
+<span class="fc" id="L86">    }</span>
+    
+    @Test @After
+    public void testError() throws IOException {
+<span class="fc" id="L90">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
+        try {
+<span class="nc" id="L92">            payment.getMonthlyAmount(null, 0, 100, 100);    // error thrown</span>
+<span class="nc" id="L93">            fail(&quot;Expected exception did not occur&quot;);</span>
+<span class="fc" id="L94">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L95">            assertEquals(&quot;Invalid input.&quot;, e.getMessage());</span>
+<span class="nc" id="L96">        }</span>
+
+        try {
+<span class="nc" id="L99">            payment.getMonthlyAmount(&quot;20000101-0000&quot;, -1, 100, 100);    // error thrown</span>
+<span class="nc" id="L100">            fail(&quot;Expected exception did not occur&quot;);</span>
+<span class="fc" id="L101">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L102">            assertEquals(&quot;Invalid input.&quot;, e.getMessage());</span>
+<span class="nc" id="L103">        }</span>
+
+        try {
+<span class="nc" id="L106">            payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, -1, 100);    // error thrown</span>
+<span class="nc" id="L107">            fail(&quot;Expected exception did not occur&quot;);</span>
+<span class="fc" id="L108">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L109">            assertEquals(&quot;Invalid input.&quot;, e.getMessage());</span>
+<span class="nc" id="L110">        }</span>
+
+        try {
+<span class="nc" id="L113">            payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, -1);    // error thrown</span>
+<span class="nc" id="L114">            fail(&quot;Expected exception did not occur&quot;);</span>
+<span class="fc" id="L115">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L116">            assertEquals(&quot;Invalid input.&quot;, e.getMessage());</span>
+<span class="nc" id="L117">        }</span>
+        
+        try{
+<span class="nc" id="L120">            payment.getMonthlyAmount(&quot;200001010000&quot;, 0, 100, 0);    // error thrown</span>
+<span class="nc" id="L121">            fail(&quot;Expected exception did not occur&quot;);</span>
+<span class="fc" id="L122">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L123">            assertEquals(&quot;Invalid personId: 200001010000&quot;, e.getMessage());</span>
+<span class="nc" id="L124">        }</span>
+        
+        try{
+<span class="nc" id="L127">            payment.getMonthlyAmount(&quot;20000101-00000&quot;, 0, 100, 0);    // error thrown</span>
+<span class="nc" id="L128">            fail(&quot;Expected exception did not occur&quot;);</span>
+<span class="fc" id="L129">        } catch (IllegalArgumentException e) {</span>
+<span class="fc" id="L130">            assertEquals(&quot;Invalid personId: 20000101-00000&quot;, e.getMessage());</span>
+<span class="nc" id="L131">        }</span>
+<span class="fc" id="L132">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
