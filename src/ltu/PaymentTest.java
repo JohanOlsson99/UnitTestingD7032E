@@ -7,16 +7,15 @@ import java.util.Calendar;
 
 import org.junit.After;
 import org.junit.Test;
-
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({CalendarImpl.class})
-public class PaymentTest<RunWith> {
+// import org.mockito.Mockito;
+// import org.powermock.api.mockito.PowerMockito;
+
+/*@RunWith(PowerMockRunner.class)
+@PrepareForTest({CalendarImpl.class})*/
+public class PaymentTest {
     private CalendarImpl cal = new CalendarImpl();
 
     
@@ -149,14 +148,23 @@ public class PaymentTest<RunWith> {
     @Test @After
     public void testPaymentDay() throws IOException {
         System.out.println("cal " + this.cal.getDate());
-        mockStatic(Calendar.class);
+        /*mockStatic(Calendar.class);
         when(Calendar.getInstance()).thenReturn(calendar);
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1); // day
         calendar.set(Calendar.MONTH, 1); // month
         calendar.set(Calendar.YEAR, 1999); // year        
         PaymentImpl payment = new PaymentImpl(this.cal);
-        System.out.println(payment.getNextPaymentDay());
+        System.out.println(payment.getNextPaymentDay());*/
+        
+        
+        Calendar endOfMarch = Calendar.getInstance();
+        endOfMarch.set(2011, Calendar.MARCH, 27);
+        PowerMockito.mockStatic(Calendar.class);
+        Mockito.when(Calendar.getInstance()).thenReturn(endOfMarch);
+        System.out.println("date: " + endOfMarch);
+        Calendar newDate = Calendar.getInstance();
+        System.out.println("date: " + newDate);
     }
 
 }

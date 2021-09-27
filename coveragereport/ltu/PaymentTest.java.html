@@ -7,147 +7,165 @@ import java.util.Calendar;
 
 import org.junit.After;
 import org.junit.Test;
+import org.mockito.Mockito;
+<span class="fc" id="L11">import org.powermock.api.mockito.PowerMockito;</span>
+<span class="fc" id="L12"></span>
+// import org.mockito.Mockito;
+// import org.powermock.api.mockito.PowerMockito;
 
-<span class="fc" id="L11">public class PaymentTest {</span>
-<span class="fc" id="L12">    private CalendarImpl cal = new CalendarImpl();</span>
-
-    
+/*@RunWith(PowerMockRunner.class)
+@PrepareForTest({CalendarImpl.class})*/
+<span class="fc" id="L18">public class PaymentTest {</span>
+    private CalendarImpl cal = new CalendarImpl();
+<span class="fc" id="L20"></span>
+<span class="fc" id="L21">    </span>
     @Test
     public void testGetLoad() throws IOException {        
         // ICalendar cal1 = new ICalendar();
-<span class="fc" id="L18">        PaymentImpl payment = new PaymentImpl(cal);</span>
-        // int test = payment.getMonthlyAmount(&quot;19990101-0000&quot;, 0, 0, 0);
-<span class="fc" id="L20">        assertEquals(0, payment.getMonthlyAmount(&quot;19990101-0000&quot;, 0, 0, 0));</span>
-<span class="fc" id="L21">    }</span>
-
+<span class="fc" id="L25">        PaymentImpl payment = new PaymentImpl(cal);</span>
+<span class="fc" id="L26">        // int test = payment.getMonthlyAmount(&quot;19990101-0000&quot;, 0, 0, 0);</span>
+<span class="fc" id="L27">        assertEquals(0, payment.getMonthlyAmount(&quot;19990101-0000&quot;, 0, 0, 0));</span>
+<span class="fc" id="L28">    }</span>
+<span class="fc" id="L29"></span>
     @Test
     public void testAgeRestrictionsAround20() throws IOException {
-<span class="fc" id="L25">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
-<span class="fc" id="L26">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 100));    // age &gt; 20</span>
-<span class="fc" id="L27">        assertEquals(9904, payment.getMonthlyAmount(&quot;20010101-0000&quot;, 0, 100, 100));    // age == 20</span>
-<span class="fc" id="L28">        assertEquals(0, payment.getMonthlyAmount(&quot;20020101-0000&quot;, 0, 100, 100));    // age &lt; 20</span>
-<span class="fc" id="L29">    }</span>
-
+        PaymentImpl payment = new PaymentImpl(this.cal);
+<span class="fc" id="L33">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 100));    // age &gt; 20</span>
+<span class="fc" id="L34">        assertEquals(9904, payment.getMonthlyAmount(&quot;20010101-0000&quot;, 0, 100, 100));    // age == 20</span>
+<span class="fc" id="L35">        assertEquals(0, payment.getMonthlyAmount(&quot;20020101-0000&quot;, 0, 100, 100));    // age &lt; 20</span>
+<span class="fc" id="L36">    }</span>
+<span class="fc" id="L37"></span>
     @Test
     public void testAgeRestrictionsAround47() throws IOException {
-<span class="fc" id="L33">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
-<span class="fc" id="L34">        assertEquals(9904, payment.getMonthlyAmount(&quot;19750101-0000&quot;, 0, 100, 100));    // age &lt; 47</span>
-<span class="fc" id="L35">        assertEquals(2816, payment.getMonthlyAmount(&quot;19740101-0000&quot;, 0, 100, 100));    // age == 47</span>
-<span class="fc" id="L36">        assertEquals(2816, payment.getMonthlyAmount(&quot;19730101-0000&quot;, 0, 100, 100));    // age &gt; 47</span>
-<span class="fc" id="L37">    }</span>
-
+        PaymentImpl payment = new PaymentImpl(this.cal);
+<span class="fc" id="L41">        assertEquals(9904, payment.getMonthlyAmount(&quot;19750101-0000&quot;, 0, 100, 100));    // age &lt; 47</span>
+<span class="fc" id="L42">        assertEquals(2816, payment.getMonthlyAmount(&quot;19740101-0000&quot;, 0, 100, 100));    // age == 47</span>
+<span class="fc" id="L43">        assertEquals(2816, payment.getMonthlyAmount(&quot;19730101-0000&quot;, 0, 100, 100));    // age &gt; 47</span>
+<span class="fc" id="L44">    }</span>
+<span class="fc" id="L45"></span>
     @Test
     public void testAgeRestrictionsAround56() throws IOException {
-<span class="fc" id="L41">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
-<span class="fc" id="L42">        assertEquals(2816, payment.getMonthlyAmount(&quot;19660101-0000&quot;, 0, 100, 100));    // age &lt; 56</span>
-<span class="fc" id="L43">        assertEquals(2816, payment.getMonthlyAmount(&quot;19650101-0000&quot;, 0, 100, 100));    // age == 56</span>
-<span class="fc" id="L44">        assertEquals(0, payment.getMonthlyAmount(&quot;19640101-0000&quot;, 0, 100, 100));    // age &gt; 56</span>
-<span class="fc" id="L45">    }</span>
-    
+        PaymentImpl payment = new PaymentImpl(this.cal);
+<span class="fc" id="L49">        assertEquals(2816, payment.getMonthlyAmount(&quot;19660101-0000&quot;, 0, 100, 100));    // age &lt; 56</span>
+<span class="fc" id="L50">        assertEquals(2816, payment.getMonthlyAmount(&quot;19650101-0000&quot;, 0, 100, 100));    // age == 56</span>
+<span class="fc" id="L51">        assertEquals(0, payment.getMonthlyAmount(&quot;19640101-0000&quot;, 0, 100, 100));    // age &gt; 56</span>
+<span class="fc" id="L52">    }</span>
+<span class="fc" id="L53">    </span>
     @Test
     public void testIncomeRestrictionsFullTime() throws IOException {
-<span class="fc" id="L49">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
-<span class="fc" id="L50">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 85813, 100, 100));    // income &lt;</span>
-<span class="fc" id="L51">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 85812, 100, 100));    // income ==</span>
-<span class="fc" id="L52">        assertEquals(0, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 85814, 100, 100));    // income &gt;</span>
-<span class="fc" id="L53">    }</span>
-    
+        PaymentImpl payment = new PaymentImpl(this.cal);
+<span class="fc" id="L57">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 85813, 100, 100));    // income &lt;</span>
+<span class="fc" id="L58">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 85812, 100, 100));    // income ==</span>
+<span class="fc" id="L59">        assertEquals(0, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 85814, 100, 100));    // income &gt;</span>
+<span class="fc" id="L60">    }</span>
+<span class="fc" id="L61">    </span>
     @Test
     public void testIncomeRestrictionsPartTime() throws IOException {
-<span class="fc" id="L57">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
-<span class="fc" id="L58">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 128721, 50, 100));    // income &lt;</span>
-<span class="fc" id="L59">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 128722, 50, 100));    // income ==</span>
-<span class="fc" id="L60">        assertEquals(0, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 128723, 50, 100));    // income &gt;</span>
-<span class="fc" id="L61">    }</span>
-    
+        PaymentImpl payment = new PaymentImpl(this.cal);
+<span class="fc" id="L65">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 128721, 50, 100));    // income &lt;</span>
+<span class="fc" id="L66">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 128722, 50, 100));    // income ==</span>
+<span class="fc" id="L67">        assertEquals(0, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 128723, 50, 100));    // income &gt;</span>
+<span class="fc" id="L68">    }</span>
+<span class="fc" id="L69">    </span>
     @Test
     public void testStudyRateRestrictionsPartTime() throws IOException {
-<span class="fc" id="L65">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
-<span class="fc" id="L66">        assertEquals(0, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 49, 100));    // study rate &lt;</span>
-<span class="fc" id="L67">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 50, 100));    // study rate ==</span>
-<span class="fc" id="L68">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 51, 100));    // study rate &gt;</span>
-<span class="fc" id="L69">    }</span>
-    
+        PaymentImpl payment = new PaymentImpl(this.cal);
+<span class="fc" id="L73">        assertEquals(0, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 49, 100));    // study rate &lt;</span>
+<span class="fc" id="L74">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 50, 100));    // study rate ==</span>
+<span class="fc" id="L75">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 51, 100));    // study rate &gt;</span>
+<span class="fc" id="L76">    }</span>
+<span class="fc" id="L77">    </span>
     @Test
     public void testStudyRateRestrictionsFullTime() throws IOException {
-<span class="fc" id="L73">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
-<span class="fc" id="L74">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 99, 100));    // study rate &lt;</span>
-<span class="fc" id="L75">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 100));    // study rate ==</span>
-<span class="fc" id="L76">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 101, 100));    // study rate &gt;</span>
-<span class="fc" id="L77">    }</span>
-    
+        PaymentImpl payment = new PaymentImpl(this.cal);
+<span class="fc" id="L81">        assertEquals(4960, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 99, 100));    // study rate &lt;</span>
+<span class="fc" id="L82">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 100));    // study rate ==</span>
+<span class="fc" id="L83">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 101, 100));    // study rate &gt;</span>
+<span class="fc" id="L84">    }</span>
+<span class="fc" id="L85">    </span>
     @Test
     public void testCompletionRatioRestrictions() throws IOException {
-<span class="fc" id="L81">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
-<span class="fc" id="L82">        assertEquals(0, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 49));    // completion ratio &lt;</span>
-<span class="fc" id="L83">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 50));    // completion ratio ==</span>
-<span class="fc" id="L84">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 51));    // completion ratio &gt;</span>
-<span class="fc" id="L85">    }</span>
-    
-    @Test
-    public void testError() throws IOException {
-<span class="fc" id="L89">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
+        PaymentImpl payment = new PaymentImpl(this.cal);
+<span class="fc" id="L89">        assertEquals(0, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 49));    // completion ratio &lt;</span>
+        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 50));    // completion ratio ==
+<span class="nc" id="L91">        assertEquals(9904, payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, 51));    // completion ratio &gt;</span>
+<span class="nc" id="L92">    }</span>
+<span class="fc" id="L93">    </span>
+<span class="fc" id="L94">    @Test</span>
+<span class="nc" id="L95">    public void testError() throws IOException {</span>
+        PaymentImpl payment = new PaymentImpl(this.cal);
         try {
-<span class="nc" id="L91">            payment.getMonthlyAmount(null, 0, 100, 100);    // error thrown</span>
-<span class="nc" id="L92">            fail(&quot;Expected exception did not occur&quot;);   // if no error thrown, cast a fail</span>
-<span class="fc" id="L93">        } catch (IllegalArgumentException e) {</span>
-<span class="fc" id="L94">            assertEquals(&quot;Invalid input.&quot;, e.getMessage());</span>
-<span class="nc" id="L95">        }</span>
-
-        try {
-<span class="nc" id="L98">            payment.getMonthlyAmount(&quot;20000101-0000&quot;, -1, 100, 100);    // error thrown</span>
+<span class="nc" id="L98">            payment.getMonthlyAmount(null, 0, 100, 100);    // error thrown</span>
 <span class="nc" id="L99">            fail(&quot;Expected exception did not occur&quot;);   // if no error thrown, cast a fail</span>
 <span class="fc" id="L100">        } catch (IllegalArgumentException e) {</span>
 <span class="fc" id="L101">            assertEquals(&quot;Invalid input.&quot;, e.getMessage());</span>
 <span class="nc" id="L102">        }</span>
 
         try {
-<span class="nc" id="L105">            payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, -1, 100);    // error thrown</span>
+<span class="nc" id="L105">            payment.getMonthlyAmount(&quot;20000101-0000&quot;, -1, 100, 100);    // error thrown</span>
 <span class="nc" id="L106">            fail(&quot;Expected exception did not occur&quot;);   // if no error thrown, cast a fail</span>
 <span class="fc" id="L107">        } catch (IllegalArgumentException e) {</span>
 <span class="fc" id="L108">            assertEquals(&quot;Invalid input.&quot;, e.getMessage());</span>
 <span class="nc" id="L109">        }</span>
 
         try {
-<span class="nc" id="L112">            payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, -1);    // error thrown</span>
+<span class="nc" id="L112">            payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, -1, 100);    // error thrown</span>
 <span class="nc" id="L113">            fail(&quot;Expected exception did not occur&quot;);   // if no error thrown, cast a fail</span>
 <span class="fc" id="L114">        } catch (IllegalArgumentException e) {</span>
 <span class="fc" id="L115">            assertEquals(&quot;Invalid input.&quot;, e.getMessage());</span>
 <span class="nc" id="L116">        }</span>
-        
-        try{
-<span class="nc" id="L119">            payment.getMonthlyAmount(&quot;200001010000&quot;, 0, 100, 0);    // error thrown</span>
+
+        try {
+<span class="nc" id="L119">            payment.getMonthlyAmount(&quot;20000101-0000&quot;, 0, 100, -1);    // error thrown</span>
 <span class="nc" id="L120">            fail(&quot;Expected exception did not occur&quot;);   // if no error thrown, cast a fail</span>
 <span class="fc" id="L121">        } catch (IllegalArgumentException e) {</span>
-<span class="fc" id="L122">            assertEquals(&quot;Invalid personId: 200001010000&quot;, e.getMessage());</span>
+<span class="fc" id="L122">            assertEquals(&quot;Invalid input.&quot;, e.getMessage());</span>
 <span class="nc" id="L123">        }</span>
         
         try{
-<span class="nc" id="L126">            payment.getMonthlyAmount(&quot;20000101-00000&quot;, 0, 100, 0);    // error thrown</span>
+<span class="nc" id="L126">            payment.getMonthlyAmount(&quot;200001010000&quot;, 0, 100, 0);    // error thrown</span>
 <span class="nc" id="L127">            fail(&quot;Expected exception did not occur&quot;);   // if no error thrown, cast a fail</span>
 <span class="fc" id="L128">        } catch (IllegalArgumentException e) {</span>
-<span class="fc" id="L129">            assertEquals(&quot;Invalid personId: 20000101-00000&quot;, e.getMessage());</span>
+<span class="fc" id="L129">            assertEquals(&quot;Invalid personId: 200001010000&quot;, e.getMessage());</span>
 <span class="nc" id="L130">        }</span>
-<span class="fc" id="L131">    }</span>
-
+<span class="fc" id="L131">        </span>
+        try{
+            payment.getMonthlyAmount(&quot;20000101-00000&quot;, 0, 100, 0);    // error thrown
+            fail(&quot;Expected exception did not occur&quot;);   // if no error thrown, cast a fail
+        } catch (IllegalArgumentException e) {
+<span class="nc" id="L136">            assertEquals(&quot;Invalid personId: 20000101-00000&quot;, e.getMessage());</span>
+<span class="nc" id="L137">        }</span>
+<span class="pc" id="L138">    }</span>
+<span class="fc" id="L139"></span>
     @Test
     public void testErrorConstructor() throws IOException {
         try {
-<span class="nc" id="L136">            new PaymentImpl(this.cal, null);</span>
-<span class="nc" id="L137">            fail(&quot;Expected exception did not occur&quot;);   // if no error thrown, cast a fail</span>
-<span class="pc" id="L138">        } catch (Exception e) { }</span>
-<span class="fc" id="L139">    }</span>
-
-    @Test @After
-    public void testPaymentDay() throws IOException {
-<span class="fc" id="L143">        System.out.println(&quot;cal &quot; + this.cal.getDate());</span>
-<span class="fc" id="L144">        Calendar calendar = Calendar.getInstance();</span>
-<span class="fc" id="L145">        calendar.set(Calendar.DAY_OF_MONTH, 1); // day</span>
-<span class="fc" id="L146">        calendar.set(Calendar.MONTH, 1); // month</span>
-<span class="fc" id="L147">        calendar.set(Calendar.YEAR, 1999); // year        </span>
-<span class="fc" id="L148">        PaymentImpl payment = new PaymentImpl(this.cal);</span>
-<span class="fc" id="L149">        System.out.println(payment.getNextPaymentDay());</span>
-<span class="fc" id="L150">    }</span>
+<span class="fc" id="L143">            new PaymentImpl(this.cal, null);</span>
+<span class="fc" id="L144">            fail(&quot;Expected exception did not occur&quot;);   // if no error thrown, cast a fail</span>
+<span class="fc" id="L145">        } catch (Exception e) { }</span>
+<span class="fc" id="L146">    }</span>
+<span class="fc" id="L147"></span>
+<span class="fc" id="L148">    @Test @After</span>
+<span class="fc" id="L149">    public void testPaymentDay() throws IOException {</span>
+<span class="fc" id="L150">        System.out.println(&quot;cal &quot; + this.cal.getDate());</span>
+        /*mockStatic(Calendar.class);
+        when(Calendar.getInstance()).thenReturn(calendar);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1); // day
+        calendar.set(Calendar.MONTH, 1); // month
+        calendar.set(Calendar.YEAR, 1999); // year        
+        PaymentImpl payment = new PaymentImpl(this.cal);
+        System.out.println(payment.getNextPaymentDay());*/
+        
+        
+        Calendar endOfMarch = Calendar.getInstance();
+        endOfMarch.set(2011, Calendar.MARCH, 27);
+        PowerMockito.mockStatic(Calendar.class);
+        Mockito.when(Calendar.getInstance()).thenReturn(endOfMarch);
+        System.out.println(&quot;date: &quot; + endOfMarch);
+        Calendar newDate = Calendar.getInstance();
+        System.out.println(&quot;date: &quot; + newDate);
+    }
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

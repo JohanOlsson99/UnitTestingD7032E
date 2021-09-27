@@ -1,6 +1,15 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "c:\\Users\\Johan\\Downloads\\powermock-mockito-1.4.8-full.jar"
+        "c:\\Users\\Johan\\Downloads\\powermock-mockito-1.4.8-full.jar",
+        "c:\\Users\\Johan\\Downloads\\test\\apiguardian-api-1.1.0.jar",
+        "c:\\Users\\Johan\\Downloads\\test\\byte-buddy-1.11.3.jar",
+        "c:\\Users\\Johan\\Downloads\\test\\byte-buddy-agent-1.11.3.jar",
+        "c:\\Users\\Johan\\Downloads\\test\\junit-jupiter-api-5.7.2.jar",
+        "c:\\Users\\Johan\\Downloads\\test\\junit-platform-commons-1.7.2.jar",
+        "c:\\Users\\Johan\\Downloads\\test\\mockito-core-3.11.2.jar",
+        "c:\\Users\\Johan\\Downloads\\test\\mockito-junit-jupiter-3.11.2.jar",
+        "c:\\Users\\Johan\\Downloads\\test\\objenesis-3.2.jar",
+        "c:\\Users\\Johan\\Downloads\\test\\opentest4j-1.2.0.jar"
     ]
 }
