@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\Johan\\Downloads\\powermock-mockito-1.4.8-full.jar"
+    ]
+}
