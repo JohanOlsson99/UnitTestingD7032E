@@ -82,7 +82,6 @@ public class PaymentImpl implements IPayment
         int age = getAge(personId);
         int amount = getLoan(age, income, studyRate, completionRatio);
         amount += getSubsidy(age, income, studyRate, completionRatio);
-        System.out.println(amount);
         return amount;
     }
 
@@ -100,7 +99,6 @@ public class PaymentImpl implements IPayment
 
     private int getLoan(int age, int income, int studyRate, int completionRatio)
     {
-        System.out.println("age:" + age);
         if (studyRate < 50 || age < 20 || age >= 47 || completionRatio < 50)
         {
             return ZERO_LOAN;

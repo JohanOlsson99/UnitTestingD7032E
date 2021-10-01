@@ -3,36 +3,20 @@ package ltu;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+
+import org.junit.Test;
 import java.util.Calendar;
 
-import org.junit.After;
-import org.junit.Test;
-import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-
-// import org.mockito.Mockito;
-// import org.powermock.api.mockito.PowerMockito;
-
-/*@RunWith(PowerMockRunner.class)
-@PrepareForTest({CalendarImpl.class})*/
 public class PaymentTest {
     private CalendarImpl cal = new CalendarImpl();
-
-    
-    @Test
-    public void testGetLoad() throws IOException {        
-        // ICalendar cal1 = new ICalendar();
-        PaymentImpl payment = new PaymentImpl(cal);
-        // int test = payment.getMonthlyAmount("19990101-0000", 0, 0, 0);
-        assertEquals(0, payment.getMonthlyAmount("19990101-0000", 0, 0, 0));
-    }
 
     @Test
     public void testAgeRestrictionsAround20() throws IOException {
         PaymentImpl payment = new PaymentImpl(this.cal);
-        assertEquals(9904, payment.getMonthlyAmount("20000101-0000", 0, 100, 100));    // age > 20
-        assertEquals(9904, payment.getMonthlyAmount("20010101-0000", 0, 100, 100));    // age == 20
         assertEquals(0, payment.getMonthlyAmount("20020101-0000", 0, 100, 100));    // age < 20
+        assertEquals(9904, payment.getMonthlyAmount("20010101-0000", 0, 100, 100));    // age == 20
+        assertEquals(9904, payment.getMonthlyAmount("20000101-0000", 0, 100, 100));    // age > 20
+        
     }
 
     @Test
@@ -54,8 +38,8 @@ public class PaymentTest {
     @Test
     public void testIncomeRestrictionsFullTime() throws IOException {
         PaymentImpl payment = new PaymentImpl(this.cal);
-        assertEquals(9904, payment.getMonthlyAmount("20000101-0000", 85813, 100, 100));    // income <
-        assertEquals(9904, payment.getMonthlyAmount("20000101-0000", 85812, 100, 100));    // income ==
+        assertEquals(9904, payment.getMonthlyAmount("20000101-0000", 85812, 100, 100));    // income <
+        assertEquals(9904, payment.getMonthlyAmount("20000101-0000", 85813, 100, 100));    // income ==
         assertEquals(0, payment.getMonthlyAmount("20000101-0000", 85814, 100, 100));    // income >
     }
     
@@ -93,78 +77,79 @@ public class PaymentTest {
     
     @Test
     public void testError() throws IOException {
-        PaymentImpl payment = new PaymentImpl(this.cal);
+        int counter = 0;
+        PaymentImpl payment = new PaymentImpl(new CalendarTest());
         try {
             payment.getMonthlyAmount(null, 0, 100, 100);    // error thrown
-            fail("Expected exception did not occur");   // if no error thrown, cast a fail
+            // fail("Expected exception did not occur");   // if no error thrown, cast a fail
         } catch (IllegalArgumentException e) {
             assertEquals("Invalid input.", e.getMessage());
+            counter++;
         }
 
         try {
             payment.getMonthlyAmount("20000101-0000", -1, 100, 100);    // error thrown
-            fail("Expected exception did not occur");   // if no error thrown, cast a fail
+            // fail("Expected exception did not occur");   // if no error thrown, cast a fail
         } catch (IllegalArgumentException e) {
             assertEquals("Invalid input.", e.getMessage());
+            counter++;
         }
 
         try {
             payment.getMonthlyAmount("20000101-0000", 0, -1, 100);    // error thrown
-            fail("Expected exception did not occur");   // if no error thrown, cast a fail
+            // fail("Expected exception did not occur");   // if no error thrown, cast a fail
         } catch (IllegalArgumentException e) {
             assertEquals("Invalid input.", e.getMessage());
+            counter++;
         }
 
         try {
             payment.getMonthlyAmount("20000101-0000", 0, 100, -1);    // error thrown
-            fail("Expected exception did not occur");   // if no error thrown, cast a fail
+            // fail("Expected exception did not occur");   // if no error thrown, cast a fail
         } catch (IllegalArgumentException e) {
             assertEquals("Invalid input.", e.getMessage());
+            counter++;
         }
         
         try{
             payment.getMonthlyAmount("200001010000", 0, 100, 0);    // error thrown
-            fail("Expected exception did not occur");   // if no error thrown, cast a fail
+            // fail("Expected exception did not occur");   // if no error thrown, cast a fail
         } catch (IllegalArgumentException e) {
             assertEquals("Invalid personId: 200001010000", e.getMessage());
+            counter++;
         }
         
         try{
             payment.getMonthlyAmount("20000101-00000", 0, 100, 0);    // error thrown
-            fail("Expected exception did not occur");   // if no error thrown, cast a fail
+            // fail("Expected exception did not occur");   // if no error thrown, cast a fail
         } catch (IllegalArgumentException e) {
             assertEquals("Invalid personId: 20000101-00000", e.getMessage());
+            counter++;
         }
+        assertEquals(6, counter);
+
     }
 
     @Test
     public void testErrorConstructor() throws IOException {
+        int counter = 0;
         try {
             new PaymentImpl(this.cal, null);
-            fail("Expected exception did not occur");   // if no error thrown, cast a fail
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            if (e.getMessage() == null) {
+                counter++;
+            }
+        }
+        assertEquals(1, counter);
     }
 
-    @Test @After
+    @Test
     public void testPaymentDay() throws IOException {
-        System.out.println("cal " + this.cal.getDate());
-        /*mockStatic(Calendar.class);
-        when(Calendar.getInstance()).thenReturn(calendar);
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, 1); // day
-        calendar.set(Calendar.MONTH, 1); // month
-        calendar.set(Calendar.YEAR, 1999); // year        
-        PaymentImpl payment = new PaymentImpl(this.cal);
-        System.out.println(payment.getNextPaymentDay());*/
-        
-        
-        Calendar endOfMarch = Calendar.getInstance();
-        endOfMarch.set(2011, Calendar.MARCH, 27);
-        PowerMockito.mockStatic(Calendar.class);
-        Mockito.when(Calendar.getInstance()).thenReturn(endOfMarch);
-        System.out.println("date: " + endOfMarch);
-        Calendar newDate = Calendar.getInstance();
-        System.out.println("date: " + newDate);
+        Calendar cal = Calendar.getInstance();
+        cal.set(2016, Calendar.JANUARY, 1); // Sunday
+        CalendarTest calTest = new CalendarTest(cal);
+        assertEquals(new PaymentImpl(calTest).getNextPaymentDay(), "20160129");
+        cal.set(2016, Calendar.APRIL, 1); // Saturday
+        assertEquals(new PaymentImpl(calTest).getNextPaymentDay(), "20160429");
     }
-
 }

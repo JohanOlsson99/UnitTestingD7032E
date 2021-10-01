@@ -23,6 +23,8 @@ public class CalendarFactory
         {
             e.printStackTrace();
         }
+        System.out.println("FACTORY NAME: " + className);
+        System.out.println("FACTORY: " + calendar);
         return calendar;
     }
 }
