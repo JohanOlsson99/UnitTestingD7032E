@@ -16,7 +16,6 @@ public class PaymentTest {
         assertEquals(0, payment.getMonthlyAmount("20020101-0000", 0, 100, 100));    // age < 20
         assertEquals(9904, payment.getMonthlyAmount("20010101-0000", 0, 100, 100));    // age == 20
         assertEquals(9904, payment.getMonthlyAmount("20000101-0000", 0, 100, 100));    // age > 20
-        
     }
 
     @Test
@@ -127,7 +126,6 @@ public class PaymentTest {
             counter++;
         }
         assertEquals(6, counter);
-
     }
 
     @Test
@@ -149,7 +147,15 @@ public class PaymentTest {
         cal.set(2016, Calendar.JANUARY, 1); // Sunday
         CalendarTest calTest = new CalendarTest(cal);
         assertEquals(new PaymentImpl(calTest).getNextPaymentDay(), "20160129");
-        cal.set(2016, Calendar.APRIL, 1); // Saturday
+        cal.set(2016, Calendar.FEBRUARY, 1); 
+        assertEquals(new PaymentImpl(calTest).getNextPaymentDay(), "20160229");
+        cal.set(2016, Calendar.MARCH, 1); 
+        assertEquals(new PaymentImpl(calTest).getNextPaymentDay(), "20160331");
+        cal.set(2016, Calendar.APRIL, 1); // Saturday   --
         assertEquals(new PaymentImpl(calTest).getNextPaymentDay(), "20160429");
+        cal.set(2016, Calendar.MAY, 1); 
+        assertEquals(new PaymentImpl(calTest).getNextPaymentDay(), "20160531");
+        cal.set(2016, Calendar.JUNE, 1);
+        assertEquals(new PaymentImpl(calTest).getNextPaymentDay(), "20160630");
     }
 }
